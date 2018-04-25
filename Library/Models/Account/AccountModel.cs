@@ -91,6 +91,7 @@ namespace Library.Models.Account
                                 CommandText = "insert into users (user_fio, data_rogd, passport_series, passport_code, certificate_code, email, user_role, login, password) values (:fio, :birthday, :passpotr_ser, :passport_num, :certif_code, :e_mail, :userRole, :login, :password)"
                             }
                         };
+                        userRole = "2";
                         adapter.InsertCommand.Parameters.Add("user_fio", OracleDbType.Varchar2).Value = fio;
                         adapter.InsertCommand.Parameters.Add("data_rogd", OracleDbType.Date).Value = DateTime.Parse(birthday);
                         adapter.InsertCommand.Parameters.Add("passport_series", OracleDbType.Int32).Value = passpotr_ser;
@@ -136,6 +137,84 @@ namespace Library.Models.Account
                 }
             }
         }
+
+
+        public string RegisterOper(string fio, string birthday, string passpotr_ser, string passport_num, string certif_code, string e_mail, string userRole, string login, string password)
+        {
+            using (Connection)
+            {
+                if (Session["login"] == null)
+                {
+                    Connection.Open();
+
+                    var adapter = new OracleDataAdapter
+                    {
+                        SelectCommand = new OracleCommand
+                        {
+                            Connection = Connection,
+                            CommandText = "select id_user from users where login = :log"
+                        }
+                    };
+                    adapter.SelectCommand.Parameters.Add("log", OracleDbType.Varchar2).Value = login;
+                    var reader = adapter.SelectCommand.ExecuteReader();
+
+                    if (!reader.HasRows)
+                    {
+                        adapter = new OracleDataAdapter
+                        {
+                            InsertCommand = new OracleCommand
+                            {
+                                Connection = Connection,
+                                CommandText = "insert into users (user_fio, data_rogd, passport_series, passport_code, certificate_code, email, user_role, login, password) values (:fio, :birthday, :passpotr_ser, :passport_num, :certif_code, :e_mail, :userRole, :login, :password)"
+                            }
+                        };
+                        userRole="3";
+                        adapter.InsertCommand.Parameters.Add("user_fio", OracleDbType.Varchar2).Value = fio;
+                        adapter.InsertCommand.Parameters.Add("data_rogd", OracleDbType.Date).Value = DateTime.Parse(birthday);
+                        adapter.InsertCommand.Parameters.Add("passport_series", OracleDbType.Int32).Value = passpotr_ser;
+                        adapter.InsertCommand.Parameters.Add("passport_code", OracleDbType.Int32).Value = passport_num;
+                        adapter.InsertCommand.Parameters.Add("certificate_code", OracleDbType.Varchar2).Value = certif_code;
+                        adapter.InsertCommand.Parameters.Add("email", OracleDbType.Varchar2).Value = e_mail;
+                        adapter.InsertCommand.Parameters.Add("user_role", OracleDbType.Int32).Value = userRole;
+                        adapter.InsertCommand.Parameters.Add("login", OracleDbType.Varchar2).Value = login;
+                        var md5 = MD5.Create();
+                        adapter.InsertCommand.Parameters.Add("password", OracleDbType.Varchar2).Value = GetMd5Hash(md5, password);
+                        adapter.InsertCommand.ExecuteReader();
+
+                        var idReader = "";
+                        adapter = new OracleDataAdapter
+                        {
+                            SelectCommand = new OracleCommand
+                            {
+                                Connection = Connection,
+                                CommandText = "select max(id_user) as id from users"
+                            }
+                        };
+                        reader = adapter.SelectCommand.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            idReader = reader["id"].ToString();
+                        }
+
+                        Session["id"] = idReader;
+                        Session["login"] = true;
+                        Connection.Close();
+                        return "Вы зарегистрированы! Удачи в пути!";
+                    }
+                    else
+                    {
+                        Connection.Close();
+                        return "Этот логин занят!";
+                    }
+                }
+                else
+                {
+                    Connection.Close();
+                    return "Вы уже авторизованы!";
+                }
+            }
+        }
+
 
         public ProfileModel GetProfile(object Readers)
         {

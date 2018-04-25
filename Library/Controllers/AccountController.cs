@@ -21,6 +21,11 @@ namespace Library.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult RegisterOper()
+        {
+            return View();
+        }
 
 
 
@@ -88,6 +93,30 @@ namespace Library.Controllers
             }
         }
 
+      
+
+        [HttpPost]
+        public ActionResult RegisterOper(RegisterOperModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                TempData["message"] = new AccountModel().RegisterOper(user.Fio1, user.Birthday1, user.PassportSeries1, user.PassportKod1, user.CertificateCode1, user.Email1, user.userRole1, user.Login1, user.Password1);
+
+                if (Session["login"] == null)
+                {
+                    return View();
+                }
+                else
+                {
+                    return Redirect("/Card/LibraryCard");
+                }
+            }
+            else
+            {
+                SaveMessages();
+                return View();
+            }
+        }
 
 
         [HttpGet]

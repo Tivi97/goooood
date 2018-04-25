@@ -172,6 +172,7 @@
     <Compile Include="Models\Account\AuthModel.cs" />
     <Compile Include="Models\Account\ReaderModel.cs" />
     <Compile Include="Models\Account\RegisterModel.cs" />
+    <Compile Include="Models\Account\RegisterOperModel.cs" />
     <Compile Include="Models\Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -194,6 +195,7 @@
     <Content Include="Views\Card\LibraryCard.cshtml" />
     <Content Include="Views\Messages\Messages.cshtml" />
     <Content Include="Views\UserCard\UserLibraryCard.cshtml" />
+    <Content Include="Views\Account\RegisterOper.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
