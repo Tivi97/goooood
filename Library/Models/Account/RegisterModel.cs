@@ -7,7 +7,7 @@ namespace Library.Models.Account
     public class RegisterModel
     {
         [Required(ErrorMessage = "Введите фамилию, имя и отчество")]
-        //  [RegularExpression(@"([А-Яа-я]+\s){2}[А-Яа-я]+", ErrorMessage = "Некорректный формат ФИО")]
+      //  [RegularExpression(@"([А-Яа-я]+\s){2}[А-Яа-я]+", ErrorMessage = "Некорректный формат ФИО")]
         public string Fio { get; set; }
 
         [Required(ErrorMessage = "Введите дату рождения")]
@@ -15,15 +15,15 @@ namespace Library.Models.Account
         public string Birthday { get; set; }
 
         [Required(ErrorMessage = "Введите серию паспорта")]
-        //[RegularExpression(@"(89)[0-9]{9}", ErrorMessage = "Некорректный формат серии паспорта")]
+        [RegularExpression(@"[0-9]{4}", ErrorMessage = "Некорректный формат серии паспорта")]
         public string PassportSeries { get; set; }
 
         [Required(ErrorMessage = "Введите номер паспорта")]
-        // [RegularExpression(@"(89)[0-9]{9}", ErrorMessage = "Некорректный формат номера паспорта")]
+         [RegularExpression(@"[0-9]{4}", ErrorMessage = "Некорректный формат номера паспорта")]
         public string PassportKod { get; set; }
 
         [Required(ErrorMessage = "Введите номер свидетельства о рождении")]
-        // [RegularExpression(@"(89)[0-9]{9}", ErrorMessage = "Некорректный формат номера паспорта")]
+        [RegularExpression(@"[0-9]{4}-[А-Я]{2}", ErrorMessage = "Некорректный формат свидетельства")]
         public string CertificateCode { get; set; }
 
         [Required(ErrorMessage = "Введите e-mail")]
